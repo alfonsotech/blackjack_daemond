@@ -1,4 +1,66 @@
-.background {
-  background-color: green;
+body {
+  background-image: url('images/blackjack-table.jpg');
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.title {
+  font-size: 3em;
+  text-align: center;
   color: white;
+  text-shadow: 2px 2px #ff0000;
+  margin-bottom: 0px;
+}
+h3 {
+  text-align: center;
+  color: white;
+  margin-top: 0px;
+}
+.top-banner {
+
+}
+
+.background {
+  background-color: rgba(255, 255, 255, .5);
+  color: white;
+  width: 80%;
+  margin: 0 auto;
+  display: block;
+  padding: 2em;
+}
+
+/*Buttons*/
+.buttons {
+  text-align: center;
+}
+#stand, #hit, #surrender {
+  font-size: 1em;
+  text-align: center;
+  padding: 5px;
+  margin: 30px 3px 3px 3px;
+}
+
+#new-hand {
+  font-size: 1.5em;
+  text-align: center;
+  padding: 5px;
+  margin: 10px 3px 3px 3px;
+  background-color: black;
+  color: white;
+}
+li {
+list-style: none;
+width: 10%;
+color: white;
+text-align: center;
+display: inline;
+}
+
+.player-cards img, .dealer-cards img {
+  width: 100px;
+}
+
+hr {
+  width: 80%;
+  opacity: .5;
 }

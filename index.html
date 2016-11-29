@@ -3,11 +3,38 @@
   <head>
     <meta charset="utf-8">
     <title>Blackjack In LG</title>
+    <link rel="stylesheet" type="text/css" href="meyers-reset.css">
     <link rel="stylesheet" type="text/css" href="styles.css">
   </head>
   <body>
+    <!-- Top Banner-->
+    <div class="top-banner">
+      <h1 class="title">Blackjack Daemon</h1>
+      <h3>Get as cloes to 21 as you can without going over!</h3>
+    </div>
+
+    <!-- Main Body-->
     <div class="background">
-<h1>Hello World</h1>
+      <h2>Dealer Cards</h2>
+      <ul class="dealer-cards">
+        <li>
+          <img src="images/playing-cards/6_of_clubs.png" alt="six-of-clubs">
+          <img src="images/playing-cards/card-back.png" alt="card-back"></li>
+      </ul>
+      <h2>Player Cards</h2>
+      <ul class="player-cards">
+        <li>
+          <img src="images/playing-cards/ace_of_spades2.png" alt="ace-of-spades">
+          <img src="images/playing-cards/10_of_hearts.png" alt="ten-of-hearts">
+        </li>
+      </ul>
+      <div class="buttons">
+        <button type="button" name="button" id="stand">Stand</button>
+        <button type="button" name="button" id="hit">Hit Me</button>
+        <button type="button" name="button" id="surrender">Surrender</button>
+        <hr>
+        <button type="button" name="button" id="new-hand">NEW HAND</button>
+      </div>
     </div>
   </body>
 </html>
