@@ -1,11 +1,17 @@
 'use strict';
 
-//TODO: attach card images to generatd values
+//TODO: attach card images to generatd values; generate random number and ue that num as index num for object
 //Could also just build an array of objects and randomly select an object to pull from
+
+
 //TODO: If an "A" is dealt, give player option to use the Ace as a 1 0r 11 value.
 
-
-//TODO: Function to add the values of cards, to be used to generate values for inital player cards, new value after hit, and dealer cardsonce both are revealed.
+//FUNCTIONS
+//TODO: Deal new hand - 2 cards to player, one to dealer
+//TODO: hit method: insert cards into player and dealer <li>
+//TODO: surrender method
+//TODO: stand method
+//TODO: add method: Function to add the values of cards, to be used to generate values for inital player cards, new value after hit, and dealer cardsonce both are revealed.
 
 //EVENT LISTENERS
 //TODO: on click of new hand button, randomly generate values for 2 player cards and 1 dealer upcard.
