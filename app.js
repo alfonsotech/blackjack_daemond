@@ -58,11 +58,12 @@ const cards = [
   { id:'51', name: 'ace', value: [1, 11], count: -1, suit: 'hearts', imagePath: 'images/playing-cards/ace_of_hearts.png', alt:'ace of hearts card'},
   { id:'52', name: 'ace', value: [1, 11], count: -1, suit: 'spades', imagePath: 'images/playing-cards/ace_of_spades.png', alt:'ace of spades card'}
 ];
-const usableCards = [];
-for(var i = 0; i<cards.length; i++) {
-  usableCards.push(cards[i].id);
-}
-console.log(usableCards);
+
+// const usableCards = [];
+// for(var i = 0; i<cards.length; i++) {
+//   usableCards.push(cards[i].id);
+// }
+// console.log(usableCards);
 
 //TODO: Alert if a natural blackjack is dealt
 function alertOfBlackjack() {
@@ -107,7 +108,7 @@ const revealDealerCard2 = function(dealerCard2) {
 
 const randomizer = function() {
   const indexNum = Math.floor((Math.random() * 52) + 1);
-  const cardIndex = usableCards[indexNum];
+  const cardIndex = cards[indexNum];
   // console.log('cardIndex', cardIndex);
   return cardIndex;
 }
