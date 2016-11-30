@@ -1,5 +1,7 @@
 'use strict';
 
+//document ready function
+
 //TODO: attach card images to generatd values; generate random number and ue that num as index num for object
 //Could also just build an array of objects and randomly select an object to pull from
 const cards = [
@@ -56,7 +58,11 @@ const cards = [
   { id:'51', name: 'ace', value: [1, 11], count: -1, suit: 'hearts', imagePath: 'images/playing-cards/ace_of_hearts.png', alt:'ace of hearts card'},
   { id:'52', name: 'ace', value: [1, 11], count: -1, suit: 'spades', imagePath: 'images/playing-cards/ace_of_spades.png', alt:'ace of spades card'}
 ];
-
+const usableCards = [];
+for(var i = 0; i<cards.length; i++) {
+  usableCards.push(cards[i].id);
+}
+console.log(usableCards);
 
 //TODO: Alert if a natural blackjack is dealt
 function alertOfBlackjack() {
@@ -82,21 +88,26 @@ function alertOfAce() {
 const drawPlayerCards = function(selectedCard, selectedCard2){
   $('.player-cards').children().remove();
   $('.player-cards').append('<img src="' + selectedCard.imagePath
-  + '"' + selectedCard.alt + '>');
+  + '" alt="' + selectedCard.alt + '">');
+  console.log('url1','<img src="' + selectedCard.imagePath
+  + '" alt="' + selectedCard.alt + '">');
   $('.player-cards').append('<img src="' + selectedCard2.imagePath
-  + '"' + selectedCard2.alt + '>');
+  + '" alt="' + selectedCard2.alt + '">');
 }
 //TODO: Deal new hand - one up card to dealer, one down card
 const drawDealerCards = function(dealerCard1) {
   $('.dealer-cards').children().remove();
   $('.dealer-cards').append('<img src="' + dealerCard1.imagePath
-  + '"' + dealerCard1.alt + '>');
+  + '" alt="' + dealerCard1.alt + '">');
   $('.dealer-cards').append('<img src="images/card-back.png" alt="card-back">');
+}
+const revealDealerCard2 = function(dealerCard2) {
+  //select second child of dealer-cards li and replace it with dealerCard2
 }
 
 const randomizer = function() {
   const indexNum = Math.floor((Math.random() * 52) + 1);
-  const cardIndex = cards[indexNum];
+  const cardIndex = usableCards[indexNum];
   // console.log('cardIndex', cardIndex);
   return cardIndex;
 }
@@ -109,6 +120,7 @@ $('#new-hand').on('click', function() {
     let dealerCard2 = randomizer();
     drawPlayerCards(selectedCard, selectedCard2);
     drawDealerCards(dealerCard1);
+    revealDealerCard2(dealerCard2);
 });
 
 
