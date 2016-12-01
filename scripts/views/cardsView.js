@@ -3,13 +3,15 @@
 let cardsView = {};
 let playerHandValue = 0;
 let dealerHandValue = 0;
+let playerCards = [];
+let dealerCards = [];
 //cardsView.toHtml();
 
 //Shuffle up a new deck/shoe and deal out first hand
 cardsView.newGame = function() {
   //on load or on clilck new game button, suffle up and deal
-  playerHandValue = 0;
-  dealerHandValue = 0;
+  playerCards = [];
+  dealerCards = [];
   $('#hit').removeAttr('disabled');
   $('#stand').removeAttr('disabled');
   $('#surrender').removeAttr('disabled');
@@ -20,20 +22,13 @@ cardsView.newGame = function() {
 //Hit
 cardsView.hitPlayer = function() {
   const indexNum = Math.floor((Math.random() * 52) + 1);
-  console.log(DeckOfCards.all);
   const cardIndex = DeckOfCards.all[indexNum];
-  console.log('cardIndex.value', cardIndex.value);
-  playerHandValue += cardIndex.value;
-  console.log('playerHandValue', playerHandValue);
   DeckOfCards.all.splice(indexNum, 1);
   return cardIndex;
 }
 cardsView.hitDealer = function() {
   const indexNum = Math.floor((Math.random() * 52) + 1);
   const cardIndex = DeckOfCards.all[indexNum];
-  console.log('cardIndex.value', cardIndex.value);
-  dealerHandValue += cardIndex.value;
-  console.log('playerHandValue', playerHandValue);
   DeckOfCards.all.splice(indexNum, 1);
   return cardIndex;
 }
@@ -45,8 +40,13 @@ cardsView.newHand = function(){
   $('#stand').removeAttr('disabled');
   $('#surrender').removeAttr('disabled');
   let playerCard1 = cardsView.hitPlayer();
+  playerCards.push(playerCard1);
   let playerCard2 = cardsView.hitPlayer();
+  playerCards.push(playerCard2);
   let dealerCard1 = cardsView.hitDealer();
+  dealerCards.push(dealerCard1);
+  console.log(dealerCards);
+  console.log(playerCards);
   drawPlayerCards(playerCard1, playerCard2);
   drawDealerCards(dealerCard1);
 
@@ -92,7 +92,10 @@ cardsView.drawToPlayer = function(newCard){
 
 cardsView.drawToDealer = function(newCard) {
   //Add up dealer cards
-  //if dealer cards <17, hit, otherwise stand and log total to chat
+  //while dealer cards <17, hit, otherwise stand and log total to chat
+  while(dealerHandValue < 17) {
+    cardsView.hitDealer();
+  }
   $('.dealer-cards').append('<img src="' + newCard.imagePath
   + '" alt="' + newCard.alt + '">');
 }
@@ -108,8 +111,13 @@ cardsView.count = function() {
 //END GAME
 //TODO: BUSTO! ==> function to alert player or dealer bust
 cardsView.bust = function() {
+
+  playerHandValue = playerCards.reduce(function(a, b) {
+    return a + b.value;
+  }, 0);
   if(playerHandValue > 21){
     $('#hit').attr('disabled', 'true');
+    cardsView.newGame();
   }
 }
 //TODO: Who won message, instructions for how to start a new hand. Should the message be different depending on whether player or dealer won?
@@ -136,9 +144,9 @@ $( document ).ready(function() {
   $('#hit').on('click', function() {
     console.log("Hit was pressed")
     let newCard = cardsView.hitPlayer();
+    playerCards.push(newCard);
     cardsView.drawToPlayer(newCard);
     cardsView.bust();
-    console.log("Finished Hit Actions")
     //Added Card Face Values
     // let cardValue = cardsView.addValues();
     //Current Hi-Lo Count
@@ -156,6 +164,7 @@ $( document ).ready(function() {
   $('#surrender').on('click', function(){
     $('#chat').text('<h4>You have surrendered. Dealer wins!</h4>');
     $('#surrender').attr('disabled', 'true');
+    cardsView.newGame();
   });
 
 });//document ready close
