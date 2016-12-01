@@ -1,25 +1,36 @@
 'use strict'
 
 let cardsView = {};
-let playerHandValue = 0;
-let dealerHandValue = 0;
+let playerHand = [];
+let dealerHand = [];
 //cardsView.toHtml();
 
 //Shuffle up a new deck/shoe and deal out first hand
 cardsView.newGame = function() {
+  DeckOfCards.fetchAll();
+  playerHand = [];
+  dealerHand = [];
   //on load or on clilck new game button, suffle up and deal
   cardsView.newHand();
 }
 
-//Hit
-cardsView.hit = function() {
-  const indexNum = Math.floor((Math.random() * 52) + 1);
-  const cardIndex = DeckOfCards.all[indexNum];
-  console.log('cardIndex.value', cardIndex.value);
-  playerHandValue += cardIndex.value;
-  console.log('playerHandValue', playerHandValue);
+var dealCard = function(){
+  const indexNum = Math.floor((Math.random() * DeckOfCards.all.length) + 1);
+  const card = DeckOfCards.all[indexNum];
   DeckOfCards.all.splice(indexNum, 1);
-  return cardIndex;
+  return card
+}
+
+//Hit
+cardsView.hitPlayer = function() {
+  var card = dealCard()
+  playerHand.push(card);
+  return card;
+}
+cardsView.hitDealer = function() {
+  var card = dealCard()
+  dealerHand.push(card);
+  return card;
 }
 //Remove card from deck
 // cardsView.removeCard(indexNum) {
@@ -37,10 +48,12 @@ cardsView.newHand = function(){
   //Deal 2 up cards to player
   function drawPlayerCards(playerCard1, playerCard2){
       $('.player-cards').children().remove();
-      $('.player-cards').append('<img src="' + playerCard1.imagePath
-      + '" alt="' + playerCard1.alt + '">');
-      $('.player-cards').append('<img src="' + playerCard2.imagePath
-      + '" alt="' + playerCard2.alt + '">');
+      playerHand.forEach(function(card){
+        $('.player-cards').append('<img src="' + card.imagePath
+        + '" alt="' + card.alt + '">');
+      })
+      // $('.player-cards').append('<img src="' + playerCard2.imagePath
+      // + '" alt="' + playerCard2.alt + '">');
     }
   //Deal one up, one down card to dealer
   function drawDealerCards(dealerCard1) {
@@ -90,10 +103,21 @@ cardsView.count = function() {
   //count up card values
 }
 
+var handTotal = function(hand){
+  var values = hand.map(function(card){ return card.value })
+  return values.reduce(function(a,b){return a+b}, 0)
+}
+
 //END GAME
 //TODO: BUSTO! ==> function to alert player or dealer bust
 cardsView.bust = function() {
-  //count up card values
+  var total = handTotal(playerHand)
+  if (total > 21) {
+    console.log('into bust function');
+    $('#hit').addClass("grey-out").disable(true);
+    $('.chat').append('<h4>You\'ve busted - so sad! The house wins.</h4>');
+  };
+
 }
 //TODO: Who won message, instructions for how to start a new hand. Should the message be different depending on whether player or dealer won?
 cardsView.winMessage = function() {
@@ -140,8 +164,10 @@ $( document ).ready(function() {
 
   }
 
+
 });//document ready close
 
 //Function Calls
-DeckOfCards.fetchAll();
+
+
 // cardsView.newHand();
