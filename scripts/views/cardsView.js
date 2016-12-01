@@ -10,6 +10,8 @@ let dealerCards = [];
 //Shuffle up a new deck/shoe and deal out first hand
 cardsView.newGame = function() {
   //on load or on clilck new game button, suffle up and deal
+  playerHandValue = 0;
+  dealerHandValue = 0;
   playerCards = [];
   dealerCards = [];
   $('#hit').removeAttr('disabled');
@@ -28,8 +30,7 @@ cardsView.hit = function() {
 }
 
 cardsView.render = function() {
-  $('dealer-cards').html('');
-  $('dealer-cards').html('<li> <img src="' + dealerCards[0].imagePath
+  $('.dealer-cards').empty('').html('<li> <img src="' + dealerCards[0].imagePath
   + '" alt="' +dealerCards[0].alt + '"> </li>');
 }
 
@@ -91,19 +92,19 @@ cardsView.drawToPlayer = function(newCard){
 }
 
 cardsView.drawToDealer = function(newCard) {
+  cardsView.render();
   //Add up dealer cards
   //while dealer cards <17, hit, otherwise stand and log total to chat
   while(dealerHandValue < 17) {
-    dealerCards.push(cardsView.hitDealer());
+    let newCard = cardsView.hit();
+    dealerCards.push(newCard);
+    console.log(dealerCards);
+    $('.dealer-cards').append('<img src="' + newCard.imagePath + '" alt="' + newCard.alt + '">');
     dealerHandValue = dealerCards.reduce(function(a, b) {
       return a + b.value;
     }, 0);
   }
-  $('.dealer-cards').append('<img src="' + newCard.imagePath
-  + '" alt="' + newCard.alt + '">');
 }
-
-cardsView.dealersTurn
 
 //TODO: add method: Function to add the values of cards, to be used to generate values for inital player cards, new value after hit, and dealer cardsonce both are revealed.
 cardsView.addValues = function() {
@@ -162,8 +163,12 @@ $( document ).ready(function() {
   $('#stand').on('click', function(){
     $('#chat').append('<h4>You have chosen to stand on ' + playerHandValue + '.</h4>');
     $('#stand').attr('disabled', 'true');
-    cardsView.render();
+    cardsView.drawToDealer();
+
   });
+
+  //dealerCards.push(cardsView.hit());
+  //console.log('dealerCards', dealerCards);
   //TODO: surrender method
   $('#surrender').on('click', function(){
     $('#chat').text('<h4>You have surrendered. Dealer wins!</h4>');
