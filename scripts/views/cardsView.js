@@ -8,11 +8,12 @@ let dealerHandValue = 0;
 //Shuffle up a new deck/shoe and deal out first hand
 cardsView.newGame = function() {
   //on load or on clilck new game button, suffle up and deal
+  DeckOfCards.fetchAll();
   cardsView.newHand();
 }
 
 //Hit
-cardsView.hit = function() {
+cardsView.hitPlayer = function() {
   const indexNum = Math.floor((Math.random() * 52) + 1);
   const cardIndex = DeckOfCards.all[indexNum];
   console.log('cardIndex.value', cardIndex.value);
@@ -21,16 +22,22 @@ cardsView.hit = function() {
   DeckOfCards.all.splice(indexNum, 1);
   return cardIndex;
 }
-//Remove card from deck
-// cardsView.removeCard(indexNum) {
-//
-// }
+cardsView.hitDealer = function() {
+  const indexNum = Math.floor((Math.random() * 52) + 1);
+  const cardIndex = DeckOfCards.all[indexNum];
+  console.log('cardIndex.value', cardIndex.value);
+  dealerHandValue += cardIndex.value;
+  console.log('playerHandValue', playerHandValue);
+  DeckOfCards.all.splice(indexNum, 1);
+  return cardIndex;
+}
+
 //Deal a new hand from card deck in use
 cardsView.newHand = function(){
       //draw three cards
-      let playerCard1 = cardsView.hit();
-      let playerCard2 = cardsView.hit();
-      let dealerCard1 = cardsView.hit();
+      let playerCard1 = cardsView.hitPlayer();
+      let playerCard2 = cardsView.hitPlayer();
+      let dealerCard1 = cardsView.hitDealer();
       drawPlayerCards(playerCard1, playerCard2);
       drawDealerCards(dealerCard1);
 
@@ -52,20 +59,20 @@ cardsView.newHand = function(){
   // const revealDealerCard2 = function(dealerCard2) {
   //   //select second child of dealer-cards li and replace it with dealerCard2
   // }
-  if( ((playerCard1.name === 'ace') || (playerCard2.name === 'ace')) && ((playerCard2.value === '10') || (playerCard2.value === '10')) ) {
-    cardsView.alertOfBlackjack();
+  if( ((playerCard1.name === 'ace') || (playerCard2.name === 'ace')) && ((playerCard1.value === '10') || (playerCard2.value === '10')) ) {
+    cardsView.alertBlackjack();
   }
   if(playerCard1.name === 'ace' || playerCard2.name === 'ace') {
-    cardsView.alertOfAce();
+    cardsView.alertAce();
   }
 }
 //Alert if a natural blackjack is dealt
-cardsView.alertOfBlackjack = function() {
+cardsView.alertBlackjack = function() {
   $('.chat').append('<h4>Congratulations, you\'ve been dealt Blackjack!!! I would stand if I were you. ツ</h4>');
 }
 
 //Alert i an A is dealt
-cardsView.alertOfAce = function() {
+cardsView.alertAce = function() {
     $('.chat').append('<h4>Congratulations, you\'ve been dealt an Ace!!! You can use your Ace as a "1" or "11."</h4>');
   }
 
@@ -93,7 +100,9 @@ cardsView.count = function() {
 //END GAME
 //TODO: BUSTO! ==> function to alert player or dealer bust
 cardsView.bust = function() {
-  //count up card values
+  if(playerHandValue > 21){
+    $('#hit').attr('disabled', 'true');
+  }
 }
 //TODO: Who won message, instructions for how to start a new hand. Should the message be different depending on whether player or dealer won?
 cardsView.winMessage = function() {
@@ -114,8 +123,9 @@ $( document ).ready(function() {
   });
   //TODO: on click of hit me button, generate a new card/value and add it to the total score
   $('#hit').on('click', function() {
-    let newCard = cardsView.hit();
+    let newCard = cardsView.hitPlayer();
     cardsView.drawToPlayer(newCard);
+    cardsView.bust();
     //Added Card Face Values
     // let cardValue = cardsView.addValues();
     // $('#chat').append('<h4>You are showing' + cardValue + '.</h4>');
@@ -126,22 +136,9 @@ $( document ).ready(function() {
 
   //TODO: on click of stand button, reveal(generate) dealer second card. Series of messages telling user where the dealer is at and what action dealer needs to take
   $('#stand').on('click', function(){
-    $('#chat').append('<h4>You have chosen to stand on ' + count + '.</h4>');
+    $('#chat').append('<h4>You have chosen to stand on ' + playerHandValue + '.</h4>');
     cardsView.drawToDealer();
   });
   //TODO: surrender method
 
-  //TODO: Allow user to double own on two cards
-  cardsView.doubleDown = function() {
-
-  }
-  //TODO: Allow user to split their cards and hit
-  cardsView.split = function() {
-
-  }
-
 });//document ready close
-
-//Function Calls
-DeckOfCards.fetchAll();
-// cardsView.newHand();

@@ -45,6 +45,9 @@ h3 {
   text-align: center;
   padding: 5px;
   margin: 15px 3px 3px 3px;
+
+}
+.grey-out {
   opacity: .5;
 }
 
