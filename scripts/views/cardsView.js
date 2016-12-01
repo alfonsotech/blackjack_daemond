@@ -20,6 +20,7 @@ cardsView.newGame = function() {
 //Hit
 cardsView.hitPlayer = function() {
   const indexNum = Math.floor((Math.random() * 52) + 1);
+  console.log(DeckOfCards.all);
   const cardIndex = DeckOfCards.all[indexNum];
   console.log('cardIndex.value', cardIndex.value);
   playerHandValue += cardIndex.value;
@@ -124,6 +125,8 @@ cardsView.surrenderMessage = function() {
 
 //Event Listeners
 $( document ).ready(function() {
+  DeckOfCards.fetchAll();
+  console.log("farts");
   //Start New Game
   $('#new-game').on('click', function() {
     cardsView.newGame();
@@ -131,12 +134,13 @@ $( document ).ready(function() {
   });
   //TODO: on click of hit me button, generate a new card/value and add it to the total score
   $('#hit').on('click', function() {
+    console.log("Hit was pressed")
     let newCard = cardsView.hitPlayer();
     cardsView.drawToPlayer(newCard);
     cardsView.bust();
+    console.log("Finished Hit Actions")
     //Added Card Face Values
     // let cardValue = cardsView.addValues();
-    // $('#chat').append('<h4>You are showing' + cardValue + '.</h4>');
     //Current Hi-Lo Count
     // let count = cardsView.count();
     // $('#chat').append('<h4>The current Count is' + count + '.</h4>');
@@ -150,7 +154,7 @@ $( document ).ready(function() {
   });
   //TODO: surrender method
   $('#surrender').on('click', function(){
-    $('#chat').append('<h4>You have surrendered. Dealer wins!</h4>');
+    $('#chat').text('<h4>You have surrendered. Dealer wins!</h4>');
     $('#surrender').attr('disabled', 'true');
   });
 
