@@ -20,17 +20,17 @@ cardsView.newGame = function() {
 }
 
 //Hit
-cardsView.hitPlayer = function() {
+cardsView.hit = function() {
   const indexNum = Math.floor((Math.random() * 52) + 1);
   const cardIndex = DeckOfCards.all[indexNum];
   DeckOfCards.all.splice(indexNum, 1);
   return cardIndex;
 }
-cardsView.hitDealer = function() {
-  const indexNum = Math.floor((Math.random() * 52) + 1);
-  const cardIndex = DeckOfCards.all[indexNum];
-  DeckOfCards.all.splice(indexNum, 1);
-  return cardIndex;
+
+cardsView.render = function() {
+  $('dealer-cards').html('');
+  $('dealer-cards').html('<li> <img src="' + dealerCards[0].imagePath
+  + '" alt="' +dealerCards[0].alt + '"> </li>');
 }
 
 //Deal a new hand from card deck in use
@@ -39,11 +39,11 @@ cardsView.newHand = function(){
   $('#hit').removeAttr('disabled');
   $('#stand').removeAttr('disabled');
   $('#surrender').removeAttr('disabled');
-  let playerCard1 = cardsView.hitPlayer();
+  let playerCard1 = cardsView.hit();
   playerCards.push(playerCard1);
-  let playerCard2 = cardsView.hitPlayer();
+  let playerCard2 = cardsView.hit();
   playerCards.push(playerCard2);
-  let dealerCard1 = cardsView.hitDealer();
+  let dealerCard1 = cardsView.hit();
   dealerCards.push(dealerCard1);
   console.log(dealerCards);
   console.log(playerCards);
@@ -53,8 +53,8 @@ cardsView.newHand = function(){
   //Deal 2 up cards to player
   function drawPlayerCards(playerCard1, playerCard2){
     $('.player-cards').children().remove();
-    $('.player-cards').append('<img src="' + playerCard1.imagePath
-    + '" alt="' + playerCard1.alt + '">');
+    $('.player-cards').append('<li> <img src="' + playerCard1.imagePath
+    + '" alt="' + playerCard1.alt + '"> </li>');
     $('.player-cards').append('<img src="' + playerCard2.imagePath
     + '" alt="' + playerCard2.alt + '">');
   }
@@ -94,11 +94,16 @@ cardsView.drawToDealer = function(newCard) {
   //Add up dealer cards
   //while dealer cards <17, hit, otherwise stand and log total to chat
   while(dealerHandValue < 17) {
-    cardsView.hitDealer();
+    dealerCards.push(cardsView.hitDealer());
+    dealerHandValue = dealerCards.reduce(function(a, b) {
+      return a + b.value;
+    }, 0);
   }
   $('.dealer-cards').append('<img src="' + newCard.imagePath
   + '" alt="' + newCard.alt + '">');
 }
+
+cardsView.dealersTurn
 
 //TODO: add method: Function to add the values of cards, to be used to generate values for inital player cards, new value after hit, and dealer cardsonce both are revealed.
 cardsView.addValues = function() {
@@ -117,7 +122,6 @@ cardsView.bust = function() {
   }, 0);
   if(playerHandValue > 21){
     $('#hit').attr('disabled', 'true');
-    cardsView.newGame();
   }
 }
 //TODO: Who won message, instructions for how to start a new hand. Should the message be different depending on whether player or dealer won?
@@ -143,7 +147,7 @@ $( document ).ready(function() {
   //TODO: on click of hit me button, generate a new card/value and add it to the total score
   $('#hit').on('click', function() {
     console.log("Hit was pressed")
-    let newCard = cardsView.hitPlayer();
+    let newCard = cardsView.hit();
     playerCards.push(newCard);
     cardsView.drawToPlayer(newCard);
     cardsView.bust();
@@ -158,13 +162,13 @@ $( document ).ready(function() {
   $('#stand').on('click', function(){
     $('#chat').append('<h4>You have chosen to stand on ' + playerHandValue + '.</h4>');
     $('#stand').attr('disabled', 'true');
-    cardsView.drawToDealer();
+    cardsView.render();
   });
   //TODO: surrender method
   $('#surrender').on('click', function(){
     $('#chat').text('<h4>You have surrendered. Dealer wins!</h4>');
     $('#surrender').attr('disabled', 'true');
-    cardsView.newGame();
+    // cardsView.newGame();
   });
 
 });//document ready close
