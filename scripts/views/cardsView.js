@@ -8,6 +8,8 @@ let dealerHandValue = 0;
 //Shuffle up a new deck/shoe and deal out first hand
 cardsView.newGame = function() {
   //on load or on clilck new game button, suffle up and deal
+  playerHandValue = 0;
+  dealerHandValue = 0;
   DeckOfCards.fetchAll();
   cardsView.newHand();
 }
@@ -34,21 +36,22 @@ cardsView.hitDealer = function() {
 
 //Deal a new hand from card deck in use
 cardsView.newHand = function(){
-      //draw three cards
-      let playerCard1 = cardsView.hitPlayer();
-      let playerCard2 = cardsView.hitPlayer();
-      let dealerCard1 = cardsView.hitDealer();
-      drawPlayerCards(playerCard1, playerCard2);
-      drawDealerCards(dealerCard1);
+  //draw three cards
+  $('#hit').removeAttr('disabled');
+  let playerCard1 = cardsView.hitPlayer();
+  let playerCard2 = cardsView.hitPlayer();
+  let dealerCard1 = cardsView.hitDealer();
+  drawPlayerCards(playerCard1, playerCard2);
+  drawDealerCards(dealerCard1);
 
   //Deal 2 up cards to player
   function drawPlayerCards(playerCard1, playerCard2){
-      $('.player-cards').children().remove();
-      $('.player-cards').append('<img src="' + playerCard1.imagePath
-      + '" alt="' + playerCard1.alt + '">');
-      $('.player-cards').append('<img src="' + playerCard2.imagePath
-      + '" alt="' + playerCard2.alt + '">');
-    }
+    $('.player-cards').children().remove();
+    $('.player-cards').append('<img src="' + playerCard1.imagePath
+    + '" alt="' + playerCard1.alt + '">');
+    $('.player-cards').append('<img src="' + playerCard2.imagePath
+    + '" alt="' + playerCard2.alt + '">');
+  }
   //Deal one up, one down card to dealer
   function drawDealerCards(dealerCard1) {
     $('.dealer-cards').children().remove();
@@ -59,7 +62,7 @@ cardsView.newHand = function(){
   // const revealDealerCard2 = function(dealerCard2) {
   //   //select second child of dealer-cards li and replace it with dealerCard2
   // }
-  if( ((playerCard1.name === 'ace') || (playerCard2.name === 'ace')) && ((playerCard1.value === '10') || (playerCard2.value === '10')) ) {
+  if( playerHandValue === 21 ) {
     cardsView.alertBlackjack();
   }
   if(playerCard1.name === 'ace' || playerCard2.name === 'ace') {
@@ -120,6 +123,7 @@ $( document ).ready(function() {
   //Start New Game
   $('#new-game').on('click', function() {
     cardsView.newGame();
+    $('#hit').removeAttr('disabled');
   });
   //TODO: on click of hit me button, generate a new card/value and add it to the total score
   $('#hit').on('click', function() {
