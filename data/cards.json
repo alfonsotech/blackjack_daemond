@@ -385,7 +385,7 @@
 }, {
 	"id": "49",
 	"name": "ace",
-	"value": [1, 11],
+	"value": 11,
 	"count": -1,
 	"suit": "clubs",
 	"imagePath": "images/playing-cards/ace_of_clubs.png",
@@ -393,7 +393,7 @@
 }, {
 	"id": "50",
 	"name": "ace",
-	"value": [1, 11],
+	"value": 11,
 	"count": -1,
 	"suit": "diamonds",
 	"imagePath": "images/playing-cards/ace_of_diamonds.png",
@@ -401,7 +401,7 @@
 }, {
 	"id": "51",
 	"name": "ace",
-	"value": [1, 11],
+	"value": 11,
 	"count": -1,
 	"suit": "hearts",
 	"imagePath": "images/playing-cards/ace_of_hearts.png",
@@ -409,7 +409,7 @@
 }, {
 	"id": "52",
 	"name": "ace",
-	"value": [1, 11],
+	"value": 11,
 	"count": -1,
 	"suit": "spades",
 	"imagePath": "images/playing-cards/ace_of_spades.png",
