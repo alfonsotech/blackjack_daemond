@@ -10,6 +10,9 @@ cardsView.newGame = function() {
   //on load or on clilck new game button, suffle up and deal
   playerHandValue = 0;
   dealerHandValue = 0;
+  $('#hit').removeAttr('disabled');
+  $('#stand').removeAttr('disabled');
+  $('#surrender').removeAttr('disabled');
   DeckOfCards.fetchAll();
   cardsView.newHand();
 }
@@ -38,6 +41,8 @@ cardsView.hitDealer = function() {
 cardsView.newHand = function(){
   //draw three cards
   $('#hit').removeAttr('disabled');
+  $('#stand').removeAttr('disabled');
+  $('#surrender').removeAttr('disabled');
   let playerCard1 = cardsView.hitPlayer();
   let playerCard2 = cardsView.hitPlayer();
   let dealerCard1 = cardsView.hitDealer();
@@ -64,8 +69,7 @@ cardsView.newHand = function(){
   // }
   if( playerHandValue === 21 ) {
     cardsView.alertBlackjack();
-  }
-  if(playerCard1.name === 'ace' || playerCard2.name === 'ace') {
+  } else if (playerCard1.name === 'ace' || playerCard2.name === 'ace') {
     cardsView.alertAce();
   }
 }
@@ -123,7 +127,7 @@ $( document ).ready(function() {
   //Start New Game
   $('#new-game').on('click', function() {
     cardsView.newGame();
-    $('#hit').removeAttr('disabled');
+
   });
   //TODO: on click of hit me button, generate a new card/value and add it to the total score
   $('#hit').on('click', function() {
@@ -141,8 +145,13 @@ $( document ).ready(function() {
   //TODO: on click of stand button, reveal(generate) dealer second card. Series of messages telling user where the dealer is at and what action dealer needs to take
   $('#stand').on('click', function(){
     $('#chat').append('<h4>You have chosen to stand on ' + playerHandValue + '.</h4>');
+    $('#stand').attr('disabled', 'true');
     cardsView.drawToDealer();
   });
   //TODO: surrender method
+  $('#surrender').on('click', function(){
+    $('#chat').append('<h4>You have surrendered. Dealer wins!</h4>');
+    $('#surrender').attr('disabled', 'true');
+  });
 
 });//document ready close
