@@ -34,18 +34,11 @@ h3 {
   text-align: center;
 }
 
-#stand, #hit, #surrender, #double-down, #split {
+#stand, #hit, #surrender {
   font-size: 1em;
   text-align: center;
   padding: 5px;
   margin: 30px 3px 0px 3px;
-}
-
-#double-down, #split  {
-  font-size: 1em;
-  text-align: center;
-  padding: 5px;
-  margin: 15px 3px 3px 3px;
 }
 
 #new-game {
@@ -70,7 +63,7 @@ h3 {
 }
 
 .chat h4 {
-  font-size: 1em;
+  font-size: 1.1em;
   color: black;
   margin: 3px;
   text-align: left;
@@ -86,10 +79,6 @@ display: inline;
 
 .player-cards img, .dealer-cards img {
   width: 100px;
-}
-
-.hidden {
-  display: none;
 }
 
 hr {
