@@ -11,13 +11,13 @@ body {
   text-shadow: 2px 2px #ff0000;
   margin-bottom: 0px;
 }
+
 h3 {
   font-size: 1.20em;
   text-align: center;
   color: white;
   margin-top: 0px;
 }
-
 
 .background {
   background-color: rgba(255, 255, 255, .5);
@@ -34,21 +34,20 @@ h3 {
 .buttons {
   text-align: center;
 }
+
 #stand, #hit, #surrender, #double-down, #split {
   font-size: 1em;
   text-align: center;
   padding: 5px;
   margin: 30px 3px 0px 3px;
 }
+
 #double-down, #split  {
   font-size: 1em;
   text-align: center;
   padding: 5px;
   margin: 15px 3px 3px 3px;
 
-}
-.grey-out {
-  opacity: .5;
 }
 
 #new-game {
@@ -66,7 +65,7 @@ h3 {
   background-color: white;
   color: black;
   width: 80%;
-  height: 6em;
+  height: 10em;
   overflow: scroll;
   display: block;
   margin: 0 auto;
