@@ -1,4 +1,6 @@
 'use strict'
+$( document ).ready(function() {
+DeckOfCards.fetchAll();
 
 let cardsView = {};
 let playerHandValue = 0;
@@ -10,20 +12,15 @@ let dealerCards = [];
 //Shuffle up a new deck/shoe and deal out first hand
 cardsView.newGame = function() {
   //on load or on clilck new game button, suffle up and deal
-  playerHandValue = 0;
-  dealerHandValue = 0;
-  playerCards = [];
-  dealerCards = [];
   $( '#hit' ).removeAttr( 'disabled' );
   $( '#stand' ).removeAttr( 'disabled' );
   $( '#surrender' ).removeAttr( 'disabled' );
-  DeckOfCards.fetchAll();
   cardsView.newHand();
 }
 
 //Hit
 cardsView.hit = function() {
-  const indexNum = Math.floor( ( Math.random() * 52 ) + 1 );
+  const indexNum = Math.floor( ( Math.random() * DeckOfCards.all.length) );
   const cardIndex = DeckOfCards.all[ indexNum ];
   DeckOfCards.all.splice( indexNum, 1 );
 
@@ -51,6 +48,10 @@ cardsView.render = function( cards ) {
 
 //Deal a new hand from card deck in use
 cardsView.newHand = function() {
+  playerHandValue = 0;
+  dealerHandValue = 0;
+  playerCards = [];
+  dealerCards = [];
   //draw three cards
   $('#hit').removeAttr('disabled');
   $('#stand').removeAttr('disabled');
@@ -92,10 +93,9 @@ cardsView.checkForBust = function( cards ) {
       $('#hit').attr('disabled', 'true');
       $('#stand').attr('disabled', 'true');
       $('#surrender').attr('disabled', 'true');
-
       $('.chat').append('<h4>Player, you just busted. House wins.</h4>');
       $('.chat').append('<h4>You are being dealt a new hand.</h4>');
-      //cardsView.newHand();
+      cardsView.newHand();
     }
   } else if( cards == dealerCards ) {
     if( cardsView.sumOfcards( dealerCards ) > 21 ) {
@@ -104,7 +104,7 @@ cardsView.checkForBust = function( cards ) {
       $('#surrender').attr('disabled', 'true');
       $('.chat').append('<h4>Dealer just busted! You WIIIIINN!</h4>');
       $('.chat').append('<h4>You are being dealt a new hand.</h4>');
-      //cardsView.newHand();
+      cardsView.newHand();
     }
   }
   return false;
@@ -116,6 +116,14 @@ cardsView.sumOfcards = function( cards ) {
   }, 0);
 }
 
+cardsView.shoeSize = function() {
+  if( DeckOfCards.all.length < 11 ) {
+    DeckOfCards.all = [];
+    DeckOfCards.fetchAll();
+    cardsView.newGame();
+
+  }
+}
 // //Alert i an A is dealt
 // cardsView.alertAce = function() {
 //     $('.chat').append('<h4>Congratulations, you\'ve been dealt an Ace!!! You can use your Ace as a "1" or "11."</h4>');
@@ -159,6 +167,8 @@ cardsView.compareHands = function() {
   } else if ( dealerHandValue > playerHandValue ) {
     $('.chat').append('<h4>Dealer\'s hand value is ' + dealerHandValue +'. Dealer wins. Better luck next time!</h4>');
   }
+  cardsView.newHand();
+  $('.chat').append('<h4>You are being dealt a new hand.</h4>');
 }
 
 //TODO: Who won message, instructions for how to start a new hand. Should the message be different depending on whether player or dealer won?
@@ -173,8 +183,8 @@ cardsView.surrenderMessage = function() {
 }
 
 //Event Listeners
-$( document ).ready(function() {
-  DeckOfCards.fetchAll();
+
+
   //Start New Game
   $('#new-game').on('click', function() {
     cardsView.newGame();
@@ -208,9 +218,9 @@ $( document ).ready(function() {
   //console.log('dealerCards', dealerCards);
   //TODO: surrender method
   $('#surrender').on('click', function(){
-    $('.chat').text('<h4>You have surrendered. Dealer wins!</h4>');
+    $('.chat').append('<h4>You have surrendered. Dealer wins!</h4>');
     $('#surrender').attr('disabled', 'true');
-    cardsView.dealerTurn();
+    cardsView.newHand();
     // cardsView.newGame();
   });
 
