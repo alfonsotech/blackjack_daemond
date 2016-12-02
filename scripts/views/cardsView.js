@@ -30,8 +30,8 @@ cardsView.hit = function() {
 }
 
 cardsView.render = function() {
-  $('.dealer-cards').empty('').html('<li> <img src="' + dealerCards[0].imagePath
-  + '" alt="' +dealerCards[0].alt + '"> </li>');
+  $('.dealer-cards').empty('').html('<li><img src="' + dealerCards[0].imagePath
+  + '" alt="' +dealerCards[0].alt + '"></li>');
 }
 
 //Deal a new hand from card deck in use
@@ -54,17 +54,17 @@ cardsView.newHand = function(){
   //Deal 2 up cards to player
   function drawPlayerCards(playerCard1, playerCard2){
     $('.player-cards').children().remove();
-    $('.player-cards').append('<li> <img src="' + playerCard1.imagePath
-    + '" alt="' + playerCard1.alt + '"> </li>');
-    $('.player-cards').append('<img src="' + playerCard2.imagePath
-    + '" alt="' + playerCard2.alt + '">');
+    $('.player-cards').append('<li><img src="' + playerCard1.imagePath
+    + '" alt="' + playerCard1.alt + '"></li>');
+    $('.player-cards').append('<li><img src="' + playerCard2.imagePath
+    + '" alt="' + playerCard2.alt + '"></li>');
   }
   //Deal one up, one down card to dealer
   function drawDealerCards(dealerCard1) {
     $('.dealer-cards').children().remove();
-    $('.dealer-cards').append('<img src="' + dealerCard1.imagePath
-    + '" alt="' + dealerCard1.alt + '">');
-    $('.dealer-cards').append('<img src="images/card-back.png" alt="card-back">');
+    $('.dealer-cards').append('<li><img src="' + dealerCard1.imagePath
+    + '" alt="' + dealerCard1.alt + '"></li>');
+    $('.dealer-cards').append('<li><img src="images/card-back.png" alt="card-back"></li>');
   }
   // const revealDealerCard2 = function(dealerCard2) {
   //   //select second child of dealer-cards li and replace it with dealerCard2
@@ -87,8 +87,8 @@ cardsView.alertAce = function() {
 
 //Continue Game
 cardsView.drawToPlayer = function(newCard){
-  $('.player-cards').append('<img src="' + newCard.imagePath
-  + '" alt="' + newCard.alt + '">');
+  $('.player-cards').append('<li><img src="' + newCard.imagePath
+  + '" alt="' + newCard.alt + '"></li>');
 }
 
 cardsView.drawToDealer = function(newCard) {
@@ -99,21 +99,40 @@ cardsView.drawToDealer = function(newCard) {
     let newCard = cardsView.hit();
     dealerCards.push(newCard);
     console.log(dealerCards);
-    $('.dealer-cards').append('<img src="' + newCard.imagePath + '" alt="' + newCard.alt + '">');
+    $('.dealer-cards').append('<li><img src="' + newCard.imagePath + '" alt="' + newCard.alt + '"></li>');
     dealerHandValue = dealerCards.reduce(function(a, b) {
       return a + b.value;
     }, 0);
   }
+  // if(dealerHandValue > 21) {
+  //
+  // }
+  //message
+  // cardsView.newHand(); /// untill shoe is low on cards
+  cardsView.compareHands();
+  // setTimeout(cardsView.newHand(), 8000);
 }
-
+cardsView.dealerBustCheck = function() {
+  if (dealerHandValue > 21){
+    $('.chat').append('<h4>Dealer went busto. Player WINNNNNS!</h4>');
+    cardsView.newHand();
+  }
+}
 //TODO: add method: Function to add the values of cards, to be used to generate values for inital player cards, new value after hit, and dealer cardsonce both are revealed.
-cardsView.addValues = function() {
+cardsView.compareHands = function() {
   //count up card values
+  if(dealerHandValue > 21) {
+    //bust message
+        $('.chat').append('<h4>Dealer just busted. Player WINS!</h4>');
+  } else if(playerHandValue > 21)  {
+    $('.chat').append('<h4>Player, you just busted. House wins.</h4>');
+  } else if (dealerHandValue > playerHandValue) {
+    //dealer wins
+    $('.chat').append('<h4>Dealer\'s hand value is ' + dealerHandValue +'. Dealer wins. Better luck next time!</h4>');
+  } else //player wins
+      $('.chat').append('<h4>Dealer\'s hand value is only ' + dealerHandValue +'. Player\'s hand value is ' + playerHandValue + '. Player WINNNS!</h4>');
 }
-cardsView.count = function() {
-  //count up card values
-}
-
+//$('.chat').append('<h4></h4>');
 //END GAME
 //TODO: BUSTO! ==> function to alert player or dealer bust
 cardsView.bust = function() {
@@ -123,6 +142,10 @@ cardsView.bust = function() {
   }, 0);
   if(playerHandValue > 21){
     $('#hit').attr('disabled', 'true');
+    $('#stand').attr('disabled', 'true');
+    $('#surrender').attr('disabled', 'true');
+    $('.chat').append('<h4>Player, you just busted. House wins.</h4>');
+    cardsView.newGame();
   }
 }
 //TODO: Who won message, instructions for how to start a new hand. Should the message be different depending on whether player or dealer won?
@@ -156,13 +179,15 @@ $( document ).ready(function() {
     // let cardValue = cardsView.addValues();
     //Current Hi-Lo Count
     // let count = cardsView.count();
-    // $('#chat').append('<h4>The current Count is' + count + '.</h4>');
+    // $('.chat').append('<h4>The current Count is' + count + '.</h4>');
   });
 
   //TODO: on click of stand button, reveal(generate) dealer second card. Series of messages telling user where the dealer is at and what action dealer needs to take
   $('#stand').on('click', function(){
-    $('#chat').append('<h4>You have chosen to stand on ' + playerHandValue + '.</h4>');
+    $('.chat').append('<h4>You have chosen to stand on ' + playerHandValue + '.</h4>');
     $('#stand').attr('disabled', 'true');
+    $('#hit').attr('disabled', 'true');
+    $('#surrender').attr('disabled', 'true');
     cardsView.drawToDealer();
 
   });
@@ -171,8 +196,9 @@ $( document ).ready(function() {
   //console.log('dealerCards', dealerCards);
   //TODO: surrender method
   $('#surrender').on('click', function(){
-    $('#chat').text('<h4>You have surrendered. Dealer wins!</h4>');
+    $('.chat').text('<h4>You have surrendered. Dealer wins!</h4>');
     $('#surrender').attr('disabled', 'true');
+    cardsView.drawToDealer();
     // cardsView.newGame();
   });
 
