@@ -29,13 +29,23 @@ cardsView.hit = function() {
   return cardIndex;
 }
 
-cardsView.render = function() {
-  $('.dealer-cards').empty('').html('<li><img src="' + dealerCards[0].imagePath
-  + '" alt="' +dealerCards[0].alt + '"></li>');
+cardsView.render = function( cards ) {
+  if( cards == dealerCards ) {
+    for( let card in dealerCards ) {
+      $('.dealer-cards').empty('').html('<li><img src="' + card.imagePath
+      + '" alt="' + card.alt + '"></li>');
+    }
+  } else {
+    for( let card in playerCards ) {
+      $('.player-cards').empty('').html('<li><img src="' + card.imagePath
+      + '" alt="' + card.alt + '"></li>');
+    }
+  }
+
 }
 
 //Deal a new hand from card deck in use
-cardsView.newHand = function(){
+cardsView.newHand = function() {
   //draw three cards
   $('#hit').removeAttr('disabled');
   $('#stand').removeAttr('disabled');
@@ -48,32 +58,40 @@ cardsView.newHand = function(){
   dealerCards.push(dealerCard1);
   console.log(dealerCards);
   console.log(playerCards);
-  drawPlayerCards(playerCard1, playerCard2);
-  drawDealerCards(dealerCard1);
+  // drawPlayerCards(playerCard1, playerCard2);
+  // drawDealerCards(dealerCard1);
+  cardsView.gameStart();
+}
 
-  //Deal 2 up cards to player
-  function drawPlayerCards(playerCard1, playerCard2){
-    $('.player-cards').children().remove();
-    $('.player-cards').append('<li><img src="' + playerCard1.imagePath
-    + '" alt="' + playerCard1.alt + '"></li>');
-    $('.player-cards').append('<li><img src="' + playerCard2.imagePath
-    + '" alt="' + playerCard2.alt + '"></li>');
-  }
-  //Deal one up, one down card to dealer
-  function drawDealerCards(dealerCard1) {
-    $('.dealer-cards').children().remove();
-    $('.dealer-cards').append('<li><img src="' + dealerCard1.imagePath
-    + '" alt="' + dealerCard1.alt + '"></li>');
-    $('.dealer-cards').append('<li><img src="images/card-back.png" alt="card-back"></li>');
-  }
-  // const revealDealerCard2 = function(dealerCard2) {
-  //   //select second child of dealer-cards li and replace it with dealerCard2
-  // }
-  if( playerHandValue === 21 ) {
+cardsView.gameStart = function() {
+  $('.player-cards').empty();
+  $('.dealer-cards').empty();
+  // repopulate board with players new cards
+  cardsView.render( playerCards );
+  cardsView.render( dealerCards );
+  // add back card image to dealer hand
+  $('.dealer-cards').append('<li><img src="images/card-back.png" alt="card-back"></li>');
+  if ( cardsView.checkForBlackjack( playerCards ) === "blackjack" ) {
     cardsView.alertBlackjack();
-  } else if (playerCard1.name === 'ace' || playerCard2.name === 'ace') {
-    cardsView.alertAce();
+  };
+}
+
+cardsView.checkForBlackjack = function( cards ) {
+  if( cardsView.sumOfcards( cards ) === 21 ){
+    if( cards.length === 2 ) {
+      return "blackjack";
+    } else if( cards.length > 2 ) {
+      return "twentyone";
+    }
+  } else {
+    return "no";
   }
+}
+
+cardsView.sumOfcards = function( cards ) {
+  cards.reduce( function (memo, card) {
+    return memo + card.value;
+  }, 0);
 }
 //Alert if a natural blackjack is dealt
 cardsView.alertBlackjack = function() {
@@ -85,11 +103,6 @@ cardsView.alertAce = function() {
     $('.chat').append('<h4>Congratulations, you\'ve been dealt an Ace!!! You can use your Ace as a "1" or "11."</h4>');
   }
 
-//Continue Game
-cardsView.drawToPlayer = function(newCard){
-  $('.player-cards').append('<li><img src="' + newCard.imagePath
-  + '" alt="' + newCard.alt + '"></li>');
-}
 
 cardsView.drawToDealer = function(newCard) {
   cardsView.render();
