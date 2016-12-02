@@ -26,6 +26,8 @@ cardsView.hit = function() {
   const indexNum = Math.floor( ( Math.random() * 52 ) + 1 );
   const cardIndex = DeckOfCards.all[ indexNum ];
   DeckOfCards.all.splice( indexNum, 1 );
+
+  cardsView.checkForBust();
   return cardIndex;
 }
 
@@ -73,21 +75,39 @@ cardsView.gameStart = function() {
   cardsView.render( dealerCards );
   // add back card image to dealer hand
   $('.dealer-cards').append('<li><img src="images/card-back.png" alt="card-back"></li>');
-  if ( cardsView.checkForBlackjack( playerCards ) === "blackjack" ) {
-    cardsView.alertBlackjack();
-  };
+  cardsView.checkForBlackjack( playerCards );
 }
 
 cardsView.checkForBlackjack = function( cards ) {
   if( cardsView.sumOfcards( cards ) === 21 ){
     if( cards.length === 2 ) {
-      return "blackjack";
-    } else if( cards.length > 2 ) {
-      return "twentyone";
+        $('.chat').append('<h4>WINNER WINNER CHICKEN DINNER! You\'ve been dealt Blackjack!!! ツ</h4>');
     }
-  } else {
-    return "no";
   }
+}
+
+cardsView.checkForBust = function( cards ) {
+  if( cards == playerCards ) {
+    if( cardsView.sumOfcards( playerCards ) > 21 ) {
+      $('#hit').attr('disabled', 'true');
+      $('#stand').attr('disabled', 'true');
+      $('#surrender').attr('disabled', 'true');
+
+      $('.chat').append('<h4>Player, you just busted. House wins.</h4>');
+      $('.chat').append('<h4>You are being dealt a new hand.</h4>');
+      //cardsView.newHand();
+    }
+  } else if( cards == dealerCards ) {
+    if( cardsView.sumOfcards( dealerCards ) > 21 ) {
+      $('#hit').attr('disabled', 'true');
+      $('#stand').attr('disabled', 'true');
+      $('#surrender').attr('disabled', 'true');
+      $('.chat').append('<h4>Dealer just busted! You WIIIIINN!</h4>');
+      $('.chat').append('<h4>You are being dealt a new hand.</h4>');
+      //cardsView.newHand();
+    }
+  }
+  return false;
 }
 
 cardsView.sumOfcards = function( cards ) {
@@ -95,16 +115,12 @@ cardsView.sumOfcards = function( cards ) {
     return memo + card.value;
   }, 0);
 }
-//Alert if a natural blackjack is dealt
-cardsView.alertBlackjack = function() {
-  $('.chat').append('<h4>Congratulations, you\'ve been dealt Blackjack!!! I would stand if I were you. ツ</h4>');
-}
 
-//Alert i an A is dealt
-cardsView.alertAce = function() {
-    $('.chat').append('<h4>Congratulations, you\'ve been dealt an Ace!!! You can use your Ace as a "1" or "11."</h4>');
-  }
-
+// //Alert i an A is dealt
+// cardsView.alertAce = function() {
+//     $('.chat').append('<h4>Congratulations, you\'ve been dealt an Ace!!! You can use your Ace as a "1" or "11."</h4>');
+//   }
+//
 
 cardsView.dealerTurn = function() {
   //Add up dealer cards
@@ -116,46 +132,35 @@ cardsView.dealerTurn = function() {
     cardsView.render( dealerCards );
     cardsView.checkForBlackjack( dealerCards );
   }
-
-  cardsView.compareHands();
+  if ( cardsView.checkForBust( dealerCards ) === false ){
+    cardsView.compareHands();
+  }
   // setTimeout(cardsView.newHand(), 8000);
 }
-cardsView.dealerBustCheck = function() {
-  if (dealerHandValue > 21){
-    $('.chat').append('<h4>Dealer went busto. Player WINNNNNS!</h4>');
-    cardsView.newHand();
-  }
-}
+// cardsView.dealerBustCheck = function() {
+//   if (dealerHandValue > 21){
+//     $('#hit').attr('disabled', 'true');
+//     $('#stand').attr('disabled', 'true');
+//     $('#surrender').attr('disabled', 'true');
+//     $('.chat').append('<h4>Player, you just busted. House wins.</h4>');
+//     $('.chat').append('<h4>You are being dealt a new hand.</h4>');
+//     cardsView.newHand();
+//   }
+// }
 //TODO: add method: Function to add the values of cards, to be used to generate values for inital player cards, new value after hit, and dealer cardsonce both are revealed.
 cardsView.compareHands = function() {
   //count up card values
-  if(dealerHandValue > 21) {
-    //bust message
-        $('.chat').append('<h4>Dealer just busted. Player WINS!</h4>');
-  } else if(playerHandValue > 21)  {
-    $('.chat').append('<h4>Player, you just busted. House wins.</h4>');
-  } else if (dealerHandValue > playerHandValue) {
-    //dealer wins
+  playerHandValue = cardsView.sumOfcards( playerCards );
+  dealerHandValue = cardsView.sumOfcards( dealerCards );
+  if( playerHandValue === dealerHandValue ) {
+    $('.chat').append('<h4>It\'s a push. You and the dealer have same hand...</h4>');
+  } else if ( playerHandValue > dealerHandValue ) {
+    $('.chat').append('<h4>Dealer\'s hand value is only ' + dealerHandValue +'. Player\'s hand value is ' + playerHandValue + '. Player WINNNS!</h4>');
+  } else if ( dealerHandValue > playerHandValue ) {
     $('.chat').append('<h4>Dealer\'s hand value is ' + dealerHandValue +'. Dealer wins. Better luck next time!</h4>');
-  } else //player wins
-      $('.chat').append('<h4>Dealer\'s hand value is only ' + dealerHandValue +'. Player\'s hand value is ' + playerHandValue + '. Player WINNNS!</h4>');
-}
-//$('.chat').append('<h4></h4>');
-//END GAME
-//TODO: BUSTO! ==> function to alert player or dealer bust
-cardsView.bust = function() {
-
-  playerHandValue = playerCards.reduce(function(a, b) {
-    return a + b.value;
-  }, 0);
-  if(playerHandValue > 21){
-    $('#hit').attr('disabled', 'true');
-    $('#stand').attr('disabled', 'true');
-    $('#surrender').attr('disabled', 'true');
-    $('.chat').append('<h4>Player, you just busted. House wins.</h4>');
-    cardsView.newGame();
   }
 }
+
 //TODO: Who won message, instructions for how to start a new hand. Should the message be different depending on whether player or dealer won?
 cardsView.winMessage = function() {
   //count up card values
@@ -182,7 +187,7 @@ $( document ).ready(function() {
     let newCard = cardsView.hit();
     playerCards.push(newCard);
     cardsView.render( playerCards );
-    cardsView.bust();
+    cardsView.checkForBust( playerCards );
     //Added Card Face Values
     // let cardValue = cardsView.addValues();
     //Current Hi-Lo Count
@@ -192,7 +197,7 @@ $( document ).ready(function() {
 
   //TODO: on click of stand button, reveal(generate) dealer second card. Series of messages telling user where the dealer is at and what action dealer needs to take
   $('#stand').on('click', function(){
-    $('.chat').append('<h4>You have chosen to stand on ' + playerHandValue + '.</h4>');
+    $('.chat').append('<h4>You have chosen to stand on ' + cardsView.sumOfcards(playerCards) + '.</h4>');
     $('#stand').attr('disabled', 'true');
     $('#hit').attr('disabled', 'true');
     $('#surrender').attr('disabled', 'true');
