@@ -14,31 +14,34 @@ cardsView.newGame = function() {
   dealerHandValue = 0;
   playerCards = [];
   dealerCards = [];
-  $('#hit').removeAttr('disabled');
-  $('#stand').removeAttr('disabled');
-  $('#surrender').removeAttr('disabled');
+  $( '#hit' ).removeAttr( 'disabled' );
+  $( '#stand' ).removeAttr( 'disabled' );
+  $( '#surrender' ).removeAttr( 'disabled' );
   DeckOfCards.fetchAll();
   cardsView.newHand();
 }
 
 //Hit
 cardsView.hit = function() {
-  const indexNum = Math.floor((Math.random() * 52) + 1);
-  const cardIndex = DeckOfCards.all[indexNum];
-  DeckOfCards.all.splice(indexNum, 1);
+  const indexNum = Math.floor( ( Math.random() * 52 ) + 1 );
+  const cardIndex = DeckOfCards.all[ indexNum ];
+  DeckOfCards.all.splice( indexNum, 1 );
   return cardIndex;
 }
 
 cardsView.render = function( cards ) {
   if( cards == dealerCards ) {
-    for( let card in dealerCards ) {
-      $('.dealer-cards').empty('').html('<li><img src="' + card.imagePath
-      + '" alt="' + card.alt + '"></li>');
+    $( '.dealer-cards' ).empty();
+    console.log( "dealerCards", dealerCards );
+    for( let card of dealerCards ) {
+      $( '.dealer-cards' ).append( '<li><img src="' + card.imagePath
+      + '" alt="' + card.alt + '"></li>' );
     }
   } else {
-    for( let card in playerCards ) {
-      $('.player-cards').empty('').html('<li><img src="' + card.imagePath
-      + '" alt="' + card.alt + '"></li>');
+    $( '.player-cards' ).empty();
+    for( let card of playerCards ) {
+      $( '.player-cards' ).append( '<li><img src="' + card.imagePath
+      + '" alt="' + card.alt + '"></li>' );
     }
   }
 
@@ -64,8 +67,7 @@ cardsView.newHand = function() {
 }
 
 cardsView.gameStart = function() {
-  $('.player-cards').empty();
-  $('.dealer-cards').empty();
+
   // repopulate board with players new cards
   cardsView.render( playerCards );
   cardsView.render( dealerCards );
@@ -89,7 +91,7 @@ cardsView.checkForBlackjack = function( cards ) {
 }
 
 cardsView.sumOfcards = function( cards ) {
-  cards.reduce( function (memo, card) {
+  return cards.reduce( function (memo, card) {
     return memo + card.value;
   }, 0);
 }
@@ -104,24 +106,17 @@ cardsView.alertAce = function() {
   }
 
 
-cardsView.drawToDealer = function(newCard) {
-  cardsView.render();
+cardsView.dealerTurn = function() {
   //Add up dealer cards
   //while dealer cards <17, hit, otherwise stand and log total to chat
-  while(dealerHandValue < 17) {
+  while( cardsView.sumOfcards( dealerCards ) < 17) {
     let newCard = cardsView.hit();
-    dealerCards.push(newCard);
-    console.log(dealerCards);
-    $('.dealer-cards').append('<li><img src="' + newCard.imagePath + '" alt="' + newCard.alt + '"></li>');
-    dealerHandValue = dealerCards.reduce(function(a, b) {
-      return a + b.value;
-    }, 0);
+    dealerCards.push( newCard );
+    console.log( dealerCards );
+    cardsView.render( dealerCards );
+    cardsView.checkForBlackjack( dealerCards );
   }
-  // if(dealerHandValue > 21) {
-  //
-  // }
-  //message
-  // cardsView.newHand(); /// untill shoe is low on cards
+
   cardsView.compareHands();
   // setTimeout(cardsView.newHand(), 8000);
 }
@@ -175,18 +170,18 @@ cardsView.surrenderMessage = function() {
 //Event Listeners
 $( document ).ready(function() {
   DeckOfCards.fetchAll();
-  console.log("farts");
   //Start New Game
   $('#new-game').on('click', function() {
     cardsView.newGame();
 
   });
+
   //TODO: on click of hit me button, generate a new card/value and add it to the total score
   $('#hit').on('click', function() {
     console.log("Hit was pressed")
     let newCard = cardsView.hit();
     playerCards.push(newCard);
-    cardsView.drawToPlayer(newCard);
+    cardsView.render( playerCards );
     cardsView.bust();
     //Added Card Face Values
     // let cardValue = cardsView.addValues();
@@ -201,8 +196,7 @@ $( document ).ready(function() {
     $('#stand').attr('disabled', 'true');
     $('#hit').attr('disabled', 'true');
     $('#surrender').attr('disabled', 'true');
-    cardsView.drawToDealer();
-
+    cardsView.dealerTurn();
   });
 
   //dealerCards.push(cardsView.hit());
@@ -211,7 +205,7 @@ $( document ).ready(function() {
   $('#surrender').on('click', function(){
     $('.chat').text('<h4>You have surrendered. Dealer wins!</h4>');
     $('#surrender').attr('disabled', 'true');
-    cardsView.drawToDealer();
+    cardsView.dealerTurn();
     // cardsView.newGame();
   });
 
