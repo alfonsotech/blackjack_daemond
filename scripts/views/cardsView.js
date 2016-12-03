@@ -78,7 +78,6 @@ cardsView.checkForBlackjack = function( cards ) {
   if( cardsView.sumOfcards( cards ) === 21 ){
     if( cards.length === 2 ) {
         $( '.chat' ).prepend( '<h4>WINNER WINNER CHICKEN DINNER! You\'ve been dealt Blackjack!!! ツ</h4>' );
-        alert('WINNER WINNER CHICKEN DINNER! You\'ve been dealt Blackjack!!! ツ');
     }
   }
 }
