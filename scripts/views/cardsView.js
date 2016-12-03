@@ -148,7 +148,6 @@ cardsView.compareHands = function() {
       $( '#stand' ).attr( 'disabled', 'true' );
       $( '#surrender' ).attr( 'disabled', 'true' );
       $( '.chat' ).prepend( '<h4>Player, you just busted. House wins.</h4>' );
-      $( '.chat' ).prepend( '<h4>→ Click "New Hand" button to keep playing.</h4>' );
     } else {
       $( '.chat' ).prepend( '<h4>Dealer\'s hand value is only ' + dealerHandValue +'. Player\'s hand value is ' + playerHandValue + '. Player WINNNS!</h4>' );
     }
@@ -158,7 +157,6 @@ cardsView.compareHands = function() {
       $( '#stand' ).attr( 'disabled', 'true' );
       $( '#surrender' ).attr( 'disabled', 'true' );
       $( '.chat' ).prepend( '<h4>Dealer just busted. You win!</h4>' );
-      $( '.chat' ).prepend( '<h4>→ Click "New Hand" button to keep playing.</h4>' );
     } else {
       $( '.chat' ).prepend( '<h4>Dealer\'s hand value is ' + dealerHandValue +'. Dealer wins. Better luck next time!</h4>' );
     }
