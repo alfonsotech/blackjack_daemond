@@ -143,12 +143,27 @@ cardsView.compareHands = function() {
   dealerHandValue = cardsView.sumOfcards( dealerCards );
   if( playerHandValue === dealerHandValue ) {
     $( '.chat' ).prepend( '<h4>It\'s a push. You and the dealer have same hand...</h4>' );
-  } else if ( playerHandValue > dealerHandValue ) {
-    $( '.chat' ).prepend( '<h4>Dealer\'s hand value is only ' + dealerHandValue +'. Player\'s hand value is ' + playerHandValue + '. Player WINNNS!</h4>' );
+  } else if ( playerHandValue > dealerHandValue) {
+    if (playerHandValue > 21 ){
+      $( '#hit' ).attr( 'disabled', 'true' );
+      $( '#stand' ).attr( 'disabled', 'true' );
+      $( '#surrender' ).attr( 'disabled', 'true' );
+      $( '.chat' ).prepend( '<h4>Player, you just busted. House wins.</h4>' );
+      $( '.chat' ).prepend( '<h4>You are being dealt a new hand.</h4>' );
+    } else {
+      $( '.chat' ).prepend( '<h4>Dealer\'s hand value is only ' + dealerHandValue +'. Player\'s hand value is ' + playerHandValue + '. Player WINNNS!</h4>' );
+    }
   } else if ( dealerHandValue > playerHandValue ) {
-    $( '.chat' ).prepend( '<h4>Dealer\'s hand value is ' + dealerHandValue +'. Dealer wins. Better luck next time!</h4>' );
+    if ( dealerHandValue > 21 ){
+      $( '#hit' ).attr( 'disabled', 'true' );
+      $( '#stand' ).attr( 'disabled', 'true' );
+      $( '#surrender' ).attr( 'disabled', 'true' );
+      $( '.chat' ).prepend( '<h4>Dealer just busted. You win!</h4>' );
+      $( '.chat' ).prepend( '<h4>You are being dealt a new hand.</h4>' );
+    } else {
+      $( '.chat' ).prepend( '<h4>Dealer\'s hand value is ' + dealerHandValue +'. Dealer wins. Better luck next time!</h4>' );
+    }
   }
-  $( '.chat' ).prepend( '<h4>You are being dealt a new hand.</h4>' );
 }
 
 
