@@ -9,7 +9,8 @@ let playerCards = [];
 let dealerCards = [];
 //cardsView.toHtml();
 
-//Shuffle up a new deck/shoe and deal out first hand
+// Method: newGame()
+// Shuffle up a new deck/shoe and deal out first hand
 cardsView.newGame = function() {
   //on load or on clilck new game button, suffle up and deal
   $( '#hit' ).removeAttr( 'disabled' );
@@ -18,7 +19,9 @@ cardsView.newGame = function() {
   cardsView.newHand();
 }
 
-//Hit
+// Method: hit()
+// Returns a random card from the current shoe/deck.
+// Checks for bust
 cardsView.hit = function() {
   const indexNum = Math.floor( ( Math.random() * DeckOfCards.all.length) );
   const cardIndex = DeckOfCards.all[ indexNum ];
@@ -30,13 +33,17 @@ cardsView.hit = function() {
 
 cardsView.render = function( cards ) {
   if( cards == dealerCards ) {
+    //console.log("You are rendering dealerCards");
+    //console.log(dealerCards);
     $( '.dealer-cards' ).empty();
     console.log( "dealerCards", dealerCards );
     for( let card of dealerCards ) {
+      console.log("You are rendering: " + card.value);
       $( '.dealer-cards' ).append( '<li><img src="' + card.imagePath
       + '" alt="' + card.alt + '"></li>' );
     }
   } else {
+    //console.log("You are rendering playerCards");
     $( '.player-cards' ).empty();
     for( let card of playerCards ) {
       $( '.player-cards' ).append( '<li><img src="' + card.imagePath
@@ -45,7 +52,9 @@ cardsView.render = function( cards ) {
   }
 }
 
-//Deal a new hand from card deck in use
+// Method: newHand()
+// Set up default environment before dealing a new
+// hand from card deck in use.
 cardsView.newHand = function() {
   playerHandValue = 0;
   dealerHandValue = 0;
@@ -68,8 +77,8 @@ cardsView.newHand = function() {
   cardsView.gameStart();
 }
 
+// Method: cardsView
 cardsView.gameStart = function() {
-
   // repopulate board with players new cards
   cardsView.render( playerCards );
   cardsView.render( dealerCards );
@@ -81,7 +90,10 @@ cardsView.gameStart = function() {
 cardsView.checkForBlackjack = function( cards ) {
   if( cardsView.sumOfcards( cards ) === 21 ){
     if( cards.length === 2 ) {
-        $( '.chat' ).append( '<h4>WINNER WINNER CHICKEN DINNER! You\'ve been dealt Blackjack!!! ツ</h4>' );
+      $( '#hit' ).attr( 'disabled', 'true' );
+      $( '#stand' ).attr( 'disabled', 'true' );
+      $( '#surrender' ).attr( 'disabled', 'true' );
+      $( '.chat' ).append( '<h4>WINNER WINNER CHICKEN DINNER! You\'ve been dealt Blackjack!!! ツ</h4>' );
     }
   }
 }
@@ -94,7 +106,6 @@ cardsView.checkForBust = function( cards ) {
       $( '#surrender' ).attr( 'disabled', 'true' );
       $( '.chat' ).append( '<h4>Player, you just busted. House wins.</h4>' );
       $( '.chat' ).append( '<h4>You are being dealt a new hand.</h4>' );
-      cardsView.newHand();
     }
   } else if( cards == dealerCards ) {
     if( cardsView.sumOfcards( dealerCards ) > 21 ) {
@@ -103,6 +114,7 @@ cardsView.checkForBust = function( cards ) {
       $( '#surrender' ).attr( 'disabled', 'true' );
       $( '.chat' ).append( '<h4>Dealer just busted! You WIIIIINN!</h4>' );
       $( '.chat' ).append( '<h4>You are being dealt a new hand.</h4>' );
+      alert( 'Click "OK" to recive a new hand.');
       cardsView.newHand();
     }
   }
@@ -117,15 +129,11 @@ cardsView.sumOfcards = function( cards ) {
 
 cardsView.shoeSize = function() {
   if( DeckOfCards.all.length < 11 ) {
-    DeckOfCards.all = [];
+    //DeckOfCards.all = [];
     DeckOfCards.fetchAll();
     cardsView.newGame();
   }
 }
-// //Alert i an A is dealt
-// cardsView.alertAce = function() {
-//     $('.chat').append('<h4>Congratulations, you\'ve been dealt an Ace!!! You can use your Ace as a "1" or "11."</h4>');
-//   }
 
 cardsView.dealerTurn = function() {
   //Add up dealer cards
@@ -142,16 +150,7 @@ cardsView.dealerTurn = function() {
   }
   // setTimeout(cardsView.newHand(), 8000);
 }
-// cardsView.dealerBustCheck = function() {
-//   if (dealerHandValue > 21){
-//     $('#hit').attr('disabled', 'true');
-//     $('#stand').attr('disabled', 'true');
-//     $('#surrender').attr('disabled', 'true');
-//     $('.chat').append('<h4>Player, you just busted. House wins.</h4>');
-//     $('.chat').append('<h4>You are being dealt a new hand.</h4>');
-//     cardsView.newHand();
-//   }
-// }
+
 //TODO: add method: Function to add the values of cards, to be used to generate values for inital player cards, new value after hit, and dealer cardsonce both are revealed.
 cardsView.compareHands = function() {
   //count up card values
@@ -164,20 +163,12 @@ cardsView.compareHands = function() {
   } else if ( dealerHandValue > playerHandValue ) {
     $( '.chat' ).append( '<h4>Dealer\'s hand value is ' + dealerHandValue +'. Dealer wins. Better luck next time!</h4>' );
   }
+  alert( 'Click "OK" to recive a new hand.');
   cardsView.newHand();
   $( '.chat' ).append( '<h4>You are being dealt a new hand.</h4>' );
 }
 
-//TODO: Who won message, instructions for how to start a new hand. Should the message be different depending on whether player or dealer won?
-cardsView.winMessage = function() {
-  //count up card values
-}
-cardsView.lostMessage = function() {
-  //count up card values
-}
-cardsView.surrenderMessage = function() {
-  //count up card values
-}
+
 
 //Event Listeners
 
@@ -194,11 +185,6 @@ cardsView.surrenderMessage = function() {
     playerCards.push( newCard );
     cardsView.render( playerCards );
     cardsView.checkForBust( playerCards );
-    //Added Card Face Values
-    // let cardValue = cardsView.addValues();
-    //Current Hi-Lo Count
-    // let count = cardsView.count();
-    // $('.chat').append('<h4>The current Count is' + count + '.</h4>');
   });
 
   //TODO: on click of stand button, reveal(generate) dealer second card. Series of messages telling user where the dealer is at and what action dealer needs to take
@@ -216,6 +202,7 @@ cardsView.surrenderMessage = function() {
   $( '#surrender' ).on( 'click', function(){
     $( '.chat' ).append( '<h4>You have surrendered. Dealer wins!</h4>' );
     $( '#surrender' ).attr( 'disabled', 'true' );
+    alert( 'Click "OK" to recive a new hand.');
     cardsView.newHand();
     // cardsView.newGame();
   });
