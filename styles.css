@@ -63,11 +63,11 @@ h3 {
 }
 
 .chat h4 {
-  font-size: 1.1em;
+  font-size: 1em;
   color: black;
   margin: 3px;
   text-align: left;
-  margin-bottom: 10px;
+  margin-bottom: 3px;
 }
 
 li {

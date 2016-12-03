@@ -90,7 +90,7 @@ cardsView.checkForBust = function( cards ) {
       $( '#stand' ).attr( 'disabled', 'true' );
       $( '#surrender' ).attr( 'disabled', 'true' );
       $( '.chat' ).prepend( '<h4>Player, you just busted. House wins.</h4>' );
-      $( '.chat' ).prepend( '<h4>You are being dealt a new hand.</h4>' );
+      $( '.chat' ).prepend( '<h4>→ Click "New Hand" button to keep playing.</h4>' );
       //cardsView.newHand();
     }
   } else if( cards == dealerCards ) {
@@ -99,7 +99,7 @@ cardsView.checkForBust = function( cards ) {
       $( '#stand' ).attr( 'disabled', 'true' );
       $( '#surrender' ).attr( 'disabled', 'true' );
       $( '.chat' ).prepend( '<h4>Dealer just busted! You WIIIIINN!</h4>' );
-      $( '.chat' ).prepend( '<h4>You are being dealt a new hand.</h4>' );
+      $( '.chat' ).prepend( '<h4>→ Click "New Hand" button to keep playing.</h4>' );
 
       //cardsView.newHand();
     }
@@ -149,7 +149,7 @@ cardsView.compareHands = function() {
       $( '#stand' ).attr( 'disabled', 'true' );
       $( '#surrender' ).attr( 'disabled', 'true' );
       $( '.chat' ).prepend( '<h4>Player, you just busted. House wins.</h4>' );
-      $( '.chat' ).prepend( '<h4>You are being dealt a new hand.</h4>' );
+      $( '.chat' ).prepend( '<h4>→ Click "New Hand" button to keep playing.</h4>' );
     } else {
       $( '.chat' ).prepend( '<h4>Dealer\'s hand value is only ' + dealerHandValue +'. Player\'s hand value is ' + playerHandValue + '. Player WINNNS!</h4>' );
     }
@@ -159,11 +159,12 @@ cardsView.compareHands = function() {
       $( '#stand' ).attr( 'disabled', 'true' );
       $( '#surrender' ).attr( 'disabled', 'true' );
       $( '.chat' ).prepend( '<h4>Dealer just busted. You win!</h4>' );
-      $( '.chat' ).prepend( '<h4>You are being dealt a new hand.</h4>' );
+      $( '.chat' ).prepend( '<h4>→ Click "New Hand" button to keep playing.</h4>' );
     } else {
       $( '.chat' ).prepend( '<h4>Dealer\'s hand value is ' + dealerHandValue +'. Dealer wins. Better luck next time!</h4>' );
     }
   }
+  $( '.chat' ).prepend( '<h4>→ Click "New Hand" button to keep playing.</h4>' );
 }
 
 
@@ -192,8 +193,10 @@ cardsView.compareHands = function() {
 
   $( '#surrender' ).on( 'click', function(){
     $( '.chat' ).prepend( '<h4>You have surrendered. Dealer wins!</h4>' );
+    $( '#stand' ).attr( 'disabled', 'true' );
+    $( '#hit' ).attr( 'disabled', 'true' );
     $( '#surrender' ).attr( 'disabled', 'true' );
-    cardsView.newHand();
+    $( '.chat' ).prepend( '<h4>→ Click "New Hand" button to keep playing.</h4>' );
   });
 
 });//document ready close
