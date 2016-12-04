@@ -1,5 +1,5 @@
 # blackjack_in_javascript
-A blackjack game that uses javascript and jquery
+A blackjack game in javascript
 
 ## Description
 
@@ -9,14 +9,12 @@ The goal of this project is to build a blackjack game for the web browser using 
 
 ## Specifications
 
-_List of specifications (specs) for the completed goal. These are declarative sentences (statements) describing a feature of the final product._
-
   - [ ] Display two up player cards and two dealer cards (one up, one down) for each new hand
-  - [ ] Player can chose to stand, hit or surrender on any hand
+  - [ ] Player can chose to stand, hit or surrender on any hand (until they go over "21" and bust)
   - [ ] When player finishes playing their hand, dealer automatically plays their hand
-  - [ ] Player can chose to continue hand by initiating a new hand
-  - [ ] Player loses if dealer has more points but hasn't busted
-  - [ ] Player wins if dealer has fewer points at end of round
+  - [ ] Player can chose to continue playing by initiating a new hand
+  - [ ] Player loses if the dealer's hand value is higher than the player's hand value, and the dealer hasn't busted
+  - [ ] Player wins if the dealer's hand value is lower than the player's hand value at end of round
   - [ ] If both player and dealer hands have the same value, it's a "draw"
   - [ ] Dealer hits on 17 or under
 
@@ -27,6 +25,7 @@ _List of specifications (specs) for the completed goal. These are declarative se
 - [ ] Animate card presentation using CSS Animations
 - [ ] Provide text console to display messages to player, including car values and who wins or looses hand
 - [ ] Provide a message of how many hands the player has won versus the house/dealer
+- [ ] Advise player whether they should stand, hit, or surrender based on basic strategy charts.
 - [ ] Player selects number of decks
 - [ ] Enable (variable or fixed) betting for each hand
 - [ ] Keep track of high/low count
