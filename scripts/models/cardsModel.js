@@ -15,7 +15,6 @@ DeckOfCards.loadAll = function( data ) {
   data.forEach( function( element ) {
     DeckOfCards.all.push(new DeckOfCards( element ));
   });
-  // console.log('loaded deck of cards:', DeckOfCards.all);
 };
 
 //Method: fetchAll
@@ -33,8 +32,3 @@ DeckOfCards.fetchAll = function() {
     console.log( 'Error', error );
   };
 };
-
-//Method to display cards to HTML
-// DeckOfCards.prototype.toHtml = function(){
-//
-// } //ES6 confused about where i use semi-colons

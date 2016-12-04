@@ -1,22 +1,8 @@
+/*Main Styles*/
 body {
   background-image: url('images/blackjack-table.jpg');
   background-size: cover;
   background-repeat: no-repeat;
-}
-
-.title {
-  font-size: 3em;
-  text-align: center;
-  color: white;
-  text-shadow: 2px 2px #ff0000;
-  margin-bottom: 0px;
-}
-
-h3 {
-  font-size: 1.20em;
-  text-align: center;
-  color: white;
-  margin-top: 0px;
 }
 
 .background {
@@ -28,6 +14,40 @@ h3 {
   padding: 2em;
   margin-bottom: 30px;
 }
+
+li {
+list-style: none;
+width: 10%;
+color: white;
+text-align: center;
+display: inline;
+}
+
+.player-cards img, .dealer-cards img {
+  width: 100px;
+}
+
+hr {
+  width: 80%;
+  opacity: .5;
+}
+
+/*Text*/
+.title {
+  font-size: 3em;
+  text-align: center;
+  color: white;
+  text-shadow: 2px 2px #ff0000;
+  margin-bottom: 0px;
+}
+
+h3 {
+  font-size: 1.5em;
+  text-align: center;
+  color: white;
+  margin-top: 0px;
+}
+
 
 /*Buttons*/
 .buttons {
@@ -52,6 +72,7 @@ h3 {
   box-shadow: 2px 2px #ffe;
 }
 
+/*Chat Box*/
 .chat {
   background-color: white;
   color: black;
@@ -68,21 +89,4 @@ h3 {
   margin: 3px;
   text-align: left;
   margin-bottom: 3px;
-}
-
-li {
-list-style: none;
-width: 10%;
-color: white;
-text-align: center;
-display: inline;
-}
-
-.player-cards img, .dealer-cards img {
-  width: 100px;
-}
-
-hr {
-  width: 80%;
-  opacity: .5;
 }

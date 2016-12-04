@@ -35,8 +35,6 @@ $( document ).ready( function() {
     playerCards.push( playerCard2 );
     let dealerCard1 = cardsView.hit();
     dealerCards.push( dealerCard1 );
-    console.log( dealerCards );
-    console.log( playerCards );
     cardsView.gameStart();
   }
 
@@ -69,7 +67,6 @@ $( document ).ready( function() {
   cardsView.render = function( cards ) {
     if( cards == dealerCards ) {
       $( '.dealer-cards' ).empty();
-      console.log( "dealerCards", dealerCards );
       for( let card of dealerCards ) {
         $( '.dealer-cards' ).append( '<li><img src="' + card.imagePath
         + '" alt="' + card.alt + '"></li>' );
@@ -138,7 +135,6 @@ $( document ).ready( function() {
     while( cardsView.sumOfcards( dealerCards ) < 17 ) {
       let newCard = cardsView.hit();
       dealerCards.push( newCard );
-      console.log( dealerCards );
       cardsView.render( dealerCards );
       cardsView.checkForBlackjack( dealerCards );
     }
@@ -177,32 +173,31 @@ $( document ).ready( function() {
   }
 
   //---- Event Listeners ----
+  $( '#new-game' ).on( 'click', function() {
+    cardsView.newGame();
+  });
 
-    $( '#new-game' ).on( 'click', function() {
-      cardsView.newGame();
-    });
+  $( '#hit' ).on( 'click', function() {
+    let newCard = cardsView.hit();
+    playerCards.push( newCard );
+    cardsView.render( playerCards );
+    cardsView.checkForBust( playerCards );
+  });
 
-    $( '#hit' ).on( 'click', function() {
-      let newCard = cardsView.hit();
-      playerCards.push( newCard );
-      cardsView.render( playerCards );
-      cardsView.checkForBust( playerCards );
-    });
+  $( '#stand' ).on( 'click', function(){
+    $( '.chat' ).prepend( '<h4>You have chosen to stand on ' + cardsView.sumOfcards(playerCards) + '.</h4>' );
+    $( '#stand' ).attr( 'disabled', 'true' );
+    $( '#hit' ).attr( 'disabled', 'true' );
+    $( '#surrender' ).attr( 'disabled', 'true' );
+    cardsView.dealerTurn();
+  });
 
-    $( '#stand' ).on( 'click', function(){
-      $( '.chat' ).prepend( '<h4>You have chosen to stand on ' + cardsView.sumOfcards(playerCards) + '.</h4>' );
-      $( '#stand' ).attr( 'disabled', 'true' );
-      $( '#hit' ).attr( 'disabled', 'true' );
-      $( '#surrender' ).attr( 'disabled', 'true' );
-      cardsView.dealerTurn();
-    });
-
-    $( '#surrender' ).on( 'click', function(){
-      $( '.chat' ).prepend( '<h4>You have surrendered. Dealer wins!</h4>' );
-      $( '#stand' ).attr( 'disabled', 'true' );
-      $( '#hit' ).attr( 'disabled', 'true' );
-      $( '#surrender' ).attr( 'disabled', 'true' );
-      $( '.chat' ).prepend( '<h4>→ Click "New Hand" button to keep playing.</h4>' );
-    });
+  $( '#surrender' ).on( 'click', function(){
+    $( '.chat' ).prepend( '<h4>You have surrendered. Dealer wins!</h4>' );
+    $( '#stand' ).attr( 'disabled', 'true' );
+    $( '#hit' ).attr( 'disabled', 'true' );
+    $( '#surrender' ).attr( 'disabled', 'true' );
+    $( '.chat' ).prepend( '<h4>→ Click "New Hand" button to keep playing.</h4>' );
+  });
 
 }); // ---- document ready close ----

@@ -1,31 +1,37 @@
-# blackjack_synch-asynch
-A blackjack game in vanilla js and node.js
+# blackjack_in_javascript
+A blackjack game that uses javascript and jquery
 
 ## Description
 
-The goal of this project is to build a blackjack game for the consol using javascript.
+The goal of this project is to build a blackjack game for the web browser using javascript.
 
 ## Context
 
 ## Specifications
 
 _List of specifications (specs) for the completed goal. These are declarative sentences (statements) describing a feature of the final product._
-- [ ] Handles basic rules of blackjack
-  - [ ] Bust on 21
-  - [ ] Player can hit or stay
+
+  - [ ] Display two up player cards and two dealer cards (one up, one down) for each new hand
+  - [ ] Player can chose to stand, hit or surrender on any hand
+  - [ ] When player finishes playing their hand, dealer automatically plays their hand
+  - [ ] Player can chose to continue hand by initiating a new hand
   - [ ] Player loses if dealer has more points but hasn't busted
   - [ ] Player wins if dealer has fewer points at end of round
-  - [ ] Dealer hits on soft 17 or under.
- 
+  - [ ] If both player and dealer hands have the same value, it's a "draw"
+  - [ ] Dealer hits on 17 or under
+
 - [ ] The artifact produced is properly licensed, preferably with the [MIT license](https://opensource.org/licenses/MIT).
 
 ##Stretch Goal
-- [ ] Player selects number of decks.
-- [ ] Keep track of high/low count.
-- [ ] Advise player of bet ideal be sizing based on card count 
 - [ ] Add card images to UI
 - [ ] Animate card presentation using CSS Animations
- 
+- [ ] Provide text console to display messages to player, including car values and who wins or looses hand
+- [ ] Provide a message of how many hands the player has won versus the house/dealer
+- [ ] Player selects number of decks
+- [ ] Enable (variable or fixed) betting for each hand
+- [ ] Keep track of high/low count
+- [ ] Advise player of ideal bet sizing based on card count
+
 
 ## Quality Rubric
 
