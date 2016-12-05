@@ -51,6 +51,7 @@ $( document ).ready( function() {
     // add back card image to dealer hand
     $( '.dealer-cards' ).append( '<li><img src="images/card-back.png" alt="card-back"></li>' );
     cardsView.checkForBlackjack( playerCards );
+    cardsView.checkForBust( playerCards );
   }
 
   // hit():
@@ -61,7 +62,6 @@ $( document ).ready( function() {
     const cardIndex = DeckOfCards.all[ indexNum ];
     DeckOfCards.all.splice( indexNum, 1 );
 
-    cardsView.checkForBust();
     return cardIndex;
   }
 
@@ -112,12 +112,44 @@ $( document ).ready( function() {
     }
   }
 
+  // noAce():
+  // Returns: true is face in hand, false otherwise
+  cardsView.noAce = function( cards ) {
+    let found = true;
+    if ( typeof cards != 'undefined' ) {
+      for ( let card of cards ){
+        if(card.name === "ace" && card.value === 11) {
+          cardsView.changeAceVal( card );
+          found = false;
+        }
+      }
+    }
+    return found;
+  }
+
+ // isBust():
+ // Returns: true if hand value > 21
+  cardsView.isBust = function( cards ) {
+    if (cardsView.sumOfcards( cards ) > 21){
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+ // changeAceVal():
+  cardsView.changeAceVal = function( card ){
+    if ( card.name === 'ace'){
+      card.value = 1;
+    }
+  }
+
   // checkForBust():
   // Checks to see if a hands value is over 21.
   // Returns: false if no bust.
   cardsView.checkForBust = function( cards ) {
     if( cards == playerCards ) {
-      if( cardsView.sumOfcards( playerCards ) > 21 ) {
+      if( cardsView.isBust( playerCards ) && cardsView.noAce( playerCards ) ) {
         dealerWins++;
         cardsView.updateScores();
         $( '#hit' ).attr( 'disabled', 'true' );
@@ -127,14 +159,12 @@ $( document ).ready( function() {
         $( '.chat' ).prepend( '<h4>→ Click "New Hand" button to keep playing.</h4>' );
       }
     } else if( cards == dealerCards ) {
-      if( cardsView.sumOfcards( dealerCards ) > 21 ) {
-        playerWins++;
+      if( cardsView.isBust( dealerCards ) && cardsView.noAce( dealerCards )) {
         cardsView.updateScores();
         $( '#hit' ).attr( 'disabled', 'true' );
         $( '#stand' ).attr( 'disabled', 'true' );
         $( '#surrender' ).attr( 'disabled', 'true' );
         $( '.chat' ).prepend( '<h4>Dealer just busted! You WIIIIINN!</h4>' );
-        $( '.chat' ).prepend( '<h4>→ Click "New Hand" button to keep playing.</h4>' );
       }
     }
     return false;
@@ -153,10 +183,10 @@ $( document ).ready( function() {
   // Logic for how the dealer should play the game.
   // Compares hands after final dealer hit.
   cardsView.dealerTurn = function() {
-    // while dealer cards <17, hit, otherwise stand.
     while( cardsView.sumOfcards( dealerCards ) < 17 ) {
       let newCard = cardsView.hit();
       dealerCards.push( newCard );
+      cardsView.checkForBust(dealerCards);
       cardsView.render( dealerCards );
       cardsView.checkForBlackjack( dealerCards );
     }
@@ -170,25 +200,18 @@ $( document ).ready( function() {
     //count up card values
     playerHandValue = cardsView.sumOfcards( playerCards );
     dealerHandValue = cardsView.sumOfcards( dealerCards );
-    if( playerHandValue === dealerHandValue ) {
+    if( dealerHandValue === playerHandValue ) {
       $( '.chat' ).prepend( '<h4>It\'s a push. You and the dealer have same hand...</h4>' );
     } else if ( playerHandValue > dealerHandValue) {
-      if (playerHandValue > 21 ){
-        $( '#hit' ).attr( 'disabled', 'true' );
-        $( '#stand' ).attr( 'disabled', 'true' );
-        $( '#surrender' ).attr( 'disabled', 'true' );
-        $( '.chat' ).prepend( '<h4>Player, you just busted. House wins.</h4>' );
+      if (cardsView.isBust( playerCards ) && cardsView.noAce( playerCards ) ){
+        cardsView.checkForBust( playerCards );
         dealerWins++;
       } else {
         $( '.chat' ).prepend( '<h4>Dealer\'s hand value is only ' + dealerHandValue +'. Player\'s hand value is ' + playerHandValue + '. Player WINNNS!</h4>' );
         playerWins++;
       }
     } else if ( dealerHandValue > playerHandValue ) {
-      if ( dealerHandValue > 21 ){
-        $( '#hit' ).attr( 'disabled', 'true' );
-        $( '#stand' ).attr( 'disabled', 'true' );
-        $( '#surrender' ).attr( 'disabled', 'true' );
-        $( '.chat' ).prepend( '<h4>Dealer just busted. You win!</h4>' );
+      if ( cardsView.isBust( dealerCards ) && cardsView.noAce( dealerCards )) {
         playerWins++;
       } else {
         $( '.chat' ).prepend( '<h4>Dealer\'s hand value is ' + dealerHandValue +'. Dealer wins. Better luck next time!</h4>' );
