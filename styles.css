@@ -12,7 +12,7 @@ body {
   margin: 0 auto;
   display: block;
   padding: 2em;
-  margin-bottom: 30px;
+  margin-bottom: 10px;
 }
 
 li {
@@ -74,11 +74,14 @@ h3 {
 
 .scores {
   margin-bottom: 10px;
+  margin-top: 10px;
   text-align: center;
+  font-size: .8em
 }
 .scores h3 {
   margin-right: 20px;
   display: inline;
+
 }
 /*Chat Box*/
 .chat {
