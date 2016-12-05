@@ -72,6 +72,14 @@ h3 {
   box-shadow: 2px 2px #ffe;
 }
 
+.scores {
+  margin-bottom: 10px;
+  text-align: center;
+}
+.scores h3 {
+  margin-right: 20px;
+  display: inline;
+}
 /*Chat Box*/
 .chat {
   background-color: white;

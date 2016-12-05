@@ -7,6 +7,8 @@ $( document ).ready( function() {
   let dealerHandValue = 0;
   let playerCards = [];
   let dealerCards = [];
+  let playerWins = 0;
+  let dealerWins = 0;
 
   // newGame():
   // Enables playing buttons.
@@ -15,6 +17,7 @@ $( document ).ready( function() {
     $( '#hit' ).removeAttr( 'disabled' );
     $( '#stand' ).removeAttr( 'disabled' );
     $( '#surrender' ).removeAttr( 'disabled' );
+    cardsView.updateScores();
     cardsView.newHand();
   }
   // newHand():
@@ -80,15 +83,30 @@ $( document ).ready( function() {
     }
   }
 
+// updateScores():
+// Updates the view on the current score count.
+  cardsView.updateScores = function() {
+    $( '#player-wins' ).empty();
+    $( '#dealer-wins' ).empty();
+    $( '#player-wins' ).html(playerWins);
+    $( '#dealer-wins' ).html(dealerWins);
+  }
+
   // checkForBlackjack():
   // Calculates if first two cards are an ace and a 10 value card.
   cardsView.checkForBlackjack = function( cards ) {
     if( cardsView.sumOfcards( cards ) === 21 ){
       if( cards.length === 2 ) {
+        if( cards = playerCards){
+          playerWins++;
+        } else {
+          dealerWins++;
+        }
         $( '#hit' ).attr( 'disabled', 'true' );
         $( '#stand' ).attr( 'disabled', 'true' );
         $( '#surrender' ).attr( 'disabled', 'true' );
         $( '.chat' ).prepend( '<h4>WINNER WINNER CHICKEN DINNER! You\'ve been dealt Blackjack!!! ツ</h4>' );
+        cardsView.updateScores();
         $( '.chat' ).prepend( '<h4>→ Click "New Hand" button to keep playing.</h4>' );
       }
     }
@@ -100,6 +118,8 @@ $( document ).ready( function() {
   cardsView.checkForBust = function( cards ) {
     if( cards == playerCards ) {
       if( cardsView.sumOfcards( playerCards ) > 21 ) {
+        dealerWins++;
+        cardsView.updateScores();
         $( '#hit' ).attr( 'disabled', 'true' );
         $( '#stand' ).attr( 'disabled', 'true' );
         $( '#surrender' ).attr( 'disabled', 'true' );
@@ -108,6 +128,8 @@ $( document ).ready( function() {
       }
     } else if( cards == dealerCards ) {
       if( cardsView.sumOfcards( dealerCards ) > 21 ) {
+        playerWins++;
+        cardsView.updateScores();
         $( '#hit' ).attr( 'disabled', 'true' );
         $( '#stand' ).attr( 'disabled', 'true' );
         $( '#surrender' ).attr( 'disabled', 'true' );
@@ -156,8 +178,10 @@ $( document ).ready( function() {
         $( '#stand' ).attr( 'disabled', 'true' );
         $( '#surrender' ).attr( 'disabled', 'true' );
         $( '.chat' ).prepend( '<h4>Player, you just busted. House wins.</h4>' );
+        dealerWins++;
       } else {
         $( '.chat' ).prepend( '<h4>Dealer\'s hand value is only ' + dealerHandValue +'. Player\'s hand value is ' + playerHandValue + '. Player WINNNS!</h4>' );
+        playerWins++;
       }
     } else if ( dealerHandValue > playerHandValue ) {
       if ( dealerHandValue > 21 ){
@@ -165,10 +189,13 @@ $( document ).ready( function() {
         $( '#stand' ).attr( 'disabled', 'true' );
         $( '#surrender' ).attr( 'disabled', 'true' );
         $( '.chat' ).prepend( '<h4>Dealer just busted. You win!</h4>' );
+        playerWins++;
       } else {
         $( '.chat' ).prepend( '<h4>Dealer\'s hand value is ' + dealerHandValue +'. Dealer wins. Better luck next time!</h4>' );
+        dealerWins++;
       }
     }
+    cardsView.updateScores();
     $( '.chat' ).prepend( '<h4>→ Click "New Hand" button to keep playing.</h4>' );
   }
 
@@ -197,6 +224,8 @@ $( document ).ready( function() {
     $( '#stand' ).attr( 'disabled', 'true' );
     $( '#hit' ).attr( 'disabled', 'true' );
     $( '#surrender' ).attr( 'disabled', 'true' );
+    dealerWins++;
+    cardsView.updateScores();
     $( '.chat' ).prepend( '<h4>→ Click "New Hand" button to keep playing.</h4>' );
   });
 
